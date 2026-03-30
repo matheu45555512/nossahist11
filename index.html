@@ -7,63 +7,53 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;400;600&display=swap');
 
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
             height: 100vh;
+            height: -webkit-fill-available; /* Ajuste para Safari mobile */
             display: flex;
             justify-content: center;
             align-items: center;
             background: radial-gradient(circle, #fff5f7 0%, #ffdee5 100%);
             overflow: hidden;
             font-family: 'Montserrat', sans-serif;
-            touch-action: manipulation; /* Melhora o toque no mobile */
         }
 
-        p { font-family: Georgia, 'Times New Roman', Times, serif; }
-
-        /* Partículas Flutuantes */
-        .heart {
-            position: absolute;
-            pointer-events: none;
-            z-index: -1;
-            animation: floatUp 6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-            filter: drop-shadow(0 0 5px rgba(255,182,193,0.8));
-        }
-
-        @keyframes floatUp {
-            0% { transform: translateY(110vh) rotate(0deg) scale(0.5); opacity: 0; }
-            20% { opacity: 0.8; }
-            100% { transform: translateY(-20vh) rotate(360deg) scale(1.2); opacity: 0; }
-        }
-
-        /* Container do Livro - Renderização 3D */
+        /* Container Principal com Ajuste de Escala para Celular */
         .book-container {
             position: relative;
-            width: 420px;
-            height: 580px;
-            transition: transform 1.5s cubic-bezier(0.645, 0.045, 0.355, 1);
-            perspective: 3000px;
-            transform-style: preserve-3d;
+            width: 400px;
+            height: 550px;
+            transition: transform 1.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+            perspective: 2000px;
         }
 
-        /* Ajustes Responsivos Premium */
-        @media screen and (max-width: 480px) {
-            .book-container { width: 300px; height: 460px; }
-            h1 { font-size: 1.8rem !important; }
-            p { font-size: 0.85rem !important; line-height: 1.4 !important; }
-            .photo-polaroid img { height: 160px !important; }
-            .book-open { transform: translateX(40%) scale(0.9); }
+        /* --- ADAPTAÇÃO PARA CELULAR (TELA PEQUENA) --- */
+        @media screen and (max-width: 500px) {
+            .book-container {
+                width: 280px; /* Livro menor no celular */
+                height: 420px;
+                transform: scale(0.9); /* Garante que caiba na tela */
+            }
+            .book-open {
+                transform: translateX(35%) scale(0.85) !important; /* Desloca menos para não vazar da tela */
+            }
+            h1 { font-size: 1.6rem !important; }
+            p { font-size: 0.8rem !important; line-height: 1.3 !important; }
+            .photo-polaroid img { height: 140px !important; }
+            .front, .back { padding: 20px !important; }
+            .badge { padding: 6px 15px !important; font-size: 0.65rem !important; }
         }
 
         .book-container::before {
             content: '';
             position: absolute;
             width: 100%; height: 100%;
-            background: #8e103a; /* Cor levemente mais escura para a capa */
-            border-radius: 5px 20px 20px 5px;
-            box-shadow: 15px 15px 50px rgba(0,0,0,0.3);
-            transform: scale(1.04);
+            background: #a31545;
+            border-radius: 5px 15px 15px 5px;
+            box-shadow: 10px 10px 30px rgba(0,0,0,0.2);
+            transform: scale(1.02);
             z-index: -1;
         }
 
@@ -71,7 +61,7 @@
             position: absolute;
             width: 100%; height: 100%;
             top: 0; left: 0;
-            transition: transform 1.5s cubic-bezier(0.645, 0.045, 0.355, 1);
+            transition: transform 1.2s cubic-bezier(0.645, 0.045, 0.355, 1);
             transform-origin: left;
             transform-style: preserve-3d;
             cursor: pointer;
@@ -80,7 +70,7 @@
         .front, .back {
             position: absolute;
             width: 100%; height: 100%;
-            padding: 35px;
+            padding: 30px;
             backface-visibility: hidden;
             display: flex;
             flex-direction: column;
@@ -88,72 +78,66 @@
             justify-content: center;
             text-align: center;
             background: #fffdfa url('https://www.transparenttextures.com/patterns/cream-paper.png');
-            border-radius: 0 15px 15px 0;
-            box-shadow: inset 2px 2px 20px rgba(0,0,0,0.05);
+            border-radius: 0 10px 10px 0;
         }
-
-        .front { z-index: 2; }
 
         .back {
             transform: rotateY(180deg);
-            border-radius: 15px 0 0 15px;
-            box-shadow: inset -10px 0 40px rgba(0,0,0,0.1);
-        }
-
-        /* Efeito de vinco no meio do livro */
-        .front::after {
-            content: '';
-            position: absolute;
-            left: 0; top: 0; width: 40px; height: 100%;
-            background: linear-gradient(to right, rgba(0,0,0,0.12) 0%, transparent 100%);
+            border-radius: 10px 0 0 10px;
+            box-shadow: inset -10px 0 30px rgba(0,0,0,0.05);
         }
 
         .flipped { transform: rotateY(-180deg); }
         .book-open { transform: translateX(50%); }
 
-        h1 { font-family: 'Dancing Script', cursive; color: #c2185b; font-size: 2.6rem; margin-bottom: 15px; text-shadow: 1px 1px 1px rgba(0,0,0,0.05); }
+        h1 { font-family: 'Dancing Script', cursive; color: #c2185b; font-size: 2.2rem; margin-bottom: 10px; }
+        p { color: #555; font-size: 0.95rem; font-family: Georgia, serif; }
         
         .photo-polaroid {
             background: white;
-            padding: 10px 10px 30px 10px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            padding: 8px 8px 20px 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
             transform: rotate(-2deg);
-            margin-bottom: 20px;
-            width: 95%;
-            border: 1px solid #f0f0f0;
+            margin-bottom: 15px;
+            width: 90%;
         }
 
-        .photo-polaroid img { width: 100%; height: 230px; object-fit: cover; border-radius: 2px; }
+        .photo-polaroid img { width: 100%; height: 200px; object-fit: cover; }
 
         .badge {
-            margin-top: 20px;
-            padding: 10px 25px;
+            margin-top: 15px;
+            padding: 8px 20px;
             border: 1.5px solid #ff4081;
-            border-radius: 30px;
+            border-radius: 20px;
             color: #ff4081;
             font-weight: 600;
-            font-size: 0.75rem;
-            letter-spacing: 2px;
+            font-size: 0.7rem;
             text-transform: uppercase;
         }
 
-        #p1 { z-index: 5; }
-        #p2 { z-index: 4; }
-        #p3 { z-index: 3; }
-        #p4 { z-index: 2; }
-        #p5 { z-index: 1; }
+        .heart {
+            position: absolute;
+            pointer-events: none;
+            z-index: -1;
+            animation: floatUp 5s linear forwards;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(110vh) scale(0.5); opacity: 0; }
+            50% { opacity: 0.8; }
+            100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+        }
+
+        #p1 { z-index: 5; } #p2 { z-index: 4; } #p3 { z-index: 3; } #p4 { z-index: 2; } #p5 { z-index: 1; }
     </style>
 </head>
 <body>
 
     <div id="book" class="book-container">
-        
         <div id="p1" class="paper" onclick="flip(1)">
             <div class="front">
                 <h1>Onde o Coração Pousa</h1>
-                <div class="photo-polaroid">
-                    <img src="cp.jpg" alt="Foto Capa">
-                </div>
+                <div class="photo-polaroid"><img src="cp.jpg"></div>
                 <p>Toque para abrir as memórias que guardo com tanto amor...</p>
             </div>
             <div class="back">
@@ -166,63 +150,45 @@
         <div id="p2" class="paper" onclick="flip(2)">
             <div class="front">
                 <h1>Nossos Detalhes</h1>
-                <div class="photo-polaroid" style="transform: rotate(2deg);">
-                    <img src="trabalho.jpg" alt="Foto 2">
-                </div>
+                <div class="photo-polaroid"><img src="trabalho.jpg"></div>
                 <p>Cada momento ao seu lado se torna uma memória inesquecível.</p>
             </div>
-            <div class="back">
-                <h1>Conexão</h1>
-                <p>Gosto de como a gente se entende, mesmo sem dizer nenhuma palavra.</p>
-            </div>
+            <div class="back"><h1>Conexão</h1><p>Gosto de como a gente se entende, mesmo sem dizer nenhuma palavra.</p></div>
         </div>
 
         <div id="p3" class="paper" onclick="flip(3)">
             <div class="front">
                 <h1>Sintonia</h1>
-                <div class="photo-polaroid" style="transform: rotate(-2deg);">
-                    <img src="nos.jpg" alt="Foto 3">
-                </div>
+                <div class="photo-polaroid"><img src="nos.jpg"></div>
                 <p>É incrível como você consegue deixar tudo mais leve e bonito.</p>
             </div>
-            <div class="back">
-                <h1>Alegria</h1>
-                <p>Você é o meu pensamento favorito durante o dia.</p>
-            </div>
+            <div class="back"><h1>Alegria</h1><p>Você é o meu pensamento favorito durante o dia.</p></div>
         </div>
 
         <div id="p4" class="paper" onclick="flip(4)">
             <div class="front">
                 <h1>Perfeita</h1>
                 <p>"Algumas pessoas trazem luz, você traz o sol inteiro para a minha vida"</p>
-                <div class="photo-polaroid" style="transform: rotate(3deg);">
-                    <img src="solo.jpg" alt="Foto Sol">
-                </div>
+                <div class="photo-polaroid"><img src="solo.jpg"></div>
             </div>
-            <div class="back">
-                <h1>Desejo</h1>
-                <p>O tempo para quando estou com você, e voa quando estamos longe.</p>
-            </div>
+            <div class="back"><h1>Desejo</h1><p>O tempo para quando estou com você, e voa quando estamos longe.</p></div>
         </div>
 
         <div id="p5" class="paper" onclick="flip(5)">
             <div class="front">
                 <h1>Para Você</h1>
-                <div class="photo-polaroid">
-                    <img src="abrac.jpg" alt="Foto Final">
-                </div>
-                <p style="font-size: 0.9rem;">Existem abraços que são casas. O seu é o meu endereço favorito, onde eu sempre quero ficar.</p>
+                <div class="photo-polaroid"><img src="abrac.jpg"></div>
+                <p style="font-size: 0.8rem;">Existem abraços que são casas. O seu é o meu endereço favorito.</p>
             </div>
-            <div class="back" style="background: #c2185b; color: white; padding: 25px;">
-                <p style="color: white; font-size: 0.85rem; line-height: 1.5; font-weight: 500; font-family: 'Montserrat', sans-serif;">
+            <div class="back" style="background: #c2185b; color: white;">
+                <p style="color: white; font-size: 0.75rem; line-height: 1.4;">
                     Não existe dia ruim se eu tiver você por perto. <br><br>
                     A saudade aperta todos os dias, mas a vontade de te encontrar e te encher de beijos e mordidas é o que me faz contar as horas. <br><br>
                     Te querer por perto virou meu vício favorito. 🥰
                 </p>
-                <div class="badge" style="border-color: white; color: white; margin-top: 20px;">PARA SEMPRE</div>
+                <div class="badge" style="border-color: white; color: white;">PARA SEMPRE</div>
             </div>
         </div>
-
     </div>
 
     <script>
@@ -235,44 +201,29 @@
                 book.classList.add('book-open');
                 document.getElementById('p1').classList.add('flipped');
                 currentStep = 1;
-            } 
-            else if (id === currentStep + 1 && id < totalPapers) {
-                const currentPaper = document.getElementById('p' + id);
-                currentPaper.classList.add('flipped');
-                currentPaper.style.zIndex = id + 5; 
+            } else if (id === currentStep + 1) {
+                document.getElementById('p' + id).classList.add('flipped');
                 currentStep = id;
-            }
-            else if (id === totalPapers && currentStep === totalPapers - 1) {
-                document.getElementById('p' + totalPapers).classList.add('flipped');
-                currentStep = totalPapers;
-            }
-            else if (currentStep === totalPapers) {
-                // Efeito de fechar o livro suavemente
+            } else if (currentStep === totalPapers) {
                 for (let i = totalPapers; i >= 1; i--) {
                     setTimeout(() => {
                         document.getElementById('p' + i).classList.remove('flipped');
                         if(i === 1) book.classList.remove('book-open');
-                    }, (totalPapers - i) * 150);
+                    }, (totalPapers - i) * 100);
                 }
                 currentStep = 0;
             }
         }
 
-        // Sistema de partículas otimizado
-        function createHearts() {
-            if (document.hidden) return; // Pausa se a aba não estiver visível
+        setInterval(() => {
             const heart = document.createElement('div');
             heart.classList.add('heart');
-            const icons = ['💖','✨','🌸','🤍','🌹'];
-            heart.innerHTML = icons[Math.floor(Math.random() * icons.length)];
+            heart.innerHTML = ['💖','✨','🌸','🤍'][Math.floor(Math.random() * 4)];
             heart.style.left = Math.random() * 100 + "vw";
-            heart.style.fontSize = (Math.random() * 12 + 15) + "px";
-            const duration = Math.random() * 3 + 4;
-            heart.style.animationDuration = duration + "s";
+            heart.style.fontSize = Math.random() * 10 + 15 + "px";
             document.body.appendChild(heart);
-            setTimeout(() => heart.remove(), duration * 1000);
-        }
-        setInterval(createHearts, 500);
+            setTimeout(() => heart.remove(), 5000);
+        }, 600);
     </script>
 </body>
 </html>
