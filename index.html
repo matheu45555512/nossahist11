@@ -2,16 +2,15 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nosso Sonho 🤍</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;400;600&display=swap');
 
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             height: 100vh;
-            height: -webkit-fill-available;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -20,47 +19,71 @@
             font-family: 'Montserrat', sans-serif;
         }
 
-        /* Container do Livro Adaptável */
-        .book-container {
-            position: relative;
-            width: 400px;
-            height: 550px;
-            transition: transform 1s cubic-bezier(0.645, 0.045, 0.355, 1);
-            perspective: 2000px;
+        p { font-family: Georgia, 'Times New Roman', Times, serif; }
+
+        /* Partículas */
+        .heart {
+            position: absolute;
+            pointer-events: none;
+            z-index: -1;
+            animation: floatUp 6s linear forwards;
+            filter: drop-shadow(0 0 5px rgba(255,182,193,0.8));
         }
 
-        /* AJUSTE 100% CELULAR */
+        @keyframes floatUp {
+            0% { transform: translateY(110vh) rotate(0deg) scale(0.5); opacity: 0; }
+            20% { opacity: 1; }
+            100% { transform: translateY(-20vh) rotate(360deg) scale(1.2); opacity: 0; }
+        }
+
+        /* Container do Livro Responsivo */
+        .book-container {
+            position: relative;
+            width: 420px;
+            height: 580px;
+            transition: transform 1.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+            perspective: 2500px;
+        }
+
+        /* Ajustes para Celulares (Telas até 480px) */
         @media screen and (max-width: 480px) {
             .book-container {
-                width: 85vw; /* Usa a largura da tela do celular */
-                height: 65vh; /* Ajusta a altura proporcional */
-                max-width: 300px;
-                max-height: 450px;
+                width: 280px;
+                height: 420px;
             }
-            .book-open {
-                transform: translateX(38%) !important; /* Move o livro para caber aberto no celular */
+            h1 { font-size: 1.8rem !important; }
+            p { font-size: 0.85rem !important; }
+            .photo-polaroid img { height: 150px !important; }
+            .badge { padding: 8px 20px !important; font-size: 0.7rem !important; }
+            .book-open { transform: translateX(42%) !important; } /* Menos deslocamento no celular */
+        }
+
+        /* Ajustes para Tablets (Telas até 768px) */
+        @media screen and (min-width: 481px) and (max-width: 992px) {
+            .book-container {
+                width: 350px;
+                height: 500px;
             }
-            h1 { font-size: 1.6rem !important; }
-            p { font-size: 0.85rem !important; line-height: 1.3 !important; }
-            .photo-polaroid img { height: 160px !important; }
         }
 
         .book-container::before {
             content: '';
             position: absolute;
-            width: 100%; height: 100%;
+            width: 100%;
+            height: 100%;
             background: #a31545;
-            border-radius: 5px 15px 15px 5px;
-            box-shadow: 10px 10px 30px rgba(0,0,0,0.15);
-            transform: scale(1.02);
+            border-radius: 5px 20px 20px 5px;
+            box-shadow: 10px 10px 40px rgba(0,0,0,0.2);
+            transform: scale(1.03);
             z-index: -1;
         }
 
         .paper {
             position: absolute;
-            width: 100%; height: 100%;
+            width: 100%;
+            height: 100%;
             top: 0; left: 0;
-            transition: transform 1s cubic-bezier(0.645, 0.045, 0.355, 1);
+            transition: transform 1.2s cubic-bezier(0.645, 0.045, 0.355, 1);
             transform-origin: left;
             transform-style: preserve-3d;
             cursor: pointer;
@@ -68,8 +91,9 @@
 
         .front, .back {
             position: absolute;
-            width: 100%; height: 100%;
-            padding: 25px;
+            width: 100%;
+            height: 100%;
+            padding: 30px;
             backface-visibility: hidden;
             display: flex;
             flex-direction: column;
@@ -77,53 +101,59 @@
             justify-content: center;
             text-align: center;
             background: #fffdfa url('https://www.transparenttextures.com/patterns/cream-paper.png');
-            border-radius: 0 10px 10px 0;
+            border-radius: 0 15px 15px 0;
             border: 1px solid rgba(0,0,0,0.05);
         }
 
+        .front { z-index: 2; box-shadow: inset 5px 0 30px rgba(0,0,0,0.05); }
+
         .back {
             transform: rotateY(180deg);
-            border-radius: 10px 0 0 10px;
-            box-shadow: inset -10px 0 30px rgba(0,0,0,0.05);
+            border-radius: 15px 0 0 15px;
+            box-shadow: inset -10px 0 50px rgba(0,0,0,0.1);
+        }
+
+        .front::after {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; width: 30px; height: 100%;
+            background: linear-gradient(to right, rgba(0,0,0,0.1) 0%, transparent 100%);
         }
 
         .flipped { transform: rotateY(-180deg); }
         .book-open { transform: translateX(50%); }
 
-        h1 { font-family: 'Dancing Script', cursive; color: #c2185b; font-size: 2.2rem; margin-bottom: 10px; }
-        p { color: #555; font-size: 0.95rem; font-family: Georgia, serif; line-height: 1.4; }
+        h1 { font-family: 'Dancing Script', cursive; color: #c2185b; font-size: 2.5rem; margin-bottom: 15px; }
+        p { line-height: 1.5; color: #555; font-size: 1rem; font-weight: 400; }
         
         .photo-polaroid {
             background: white;
-            padding: 8px 8px 20px 8px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transform: rotate(-2deg);
+            padding: 10px 10px 25px 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            transform: rotate(-3deg);
             margin-bottom: 15px;
             width: 90%;
         }
 
-        .photo-polaroid img { width: 100%; height: 210px; object-fit: cover; }
+        .photo-polaroid img { width: 100%; height: 220px; object-fit: cover; border: 1px solid #eee; }
 
         .badge {
             margin-top: 15px;
-            padding: 8px 20px;
-            border: 1.5px solid #ff4081;
-            border-radius: 20px;
+            padding: 10px 25px;
+            border: 2px solid #ff4081;
+            border-radius: 30px;
             color: #ff4081;
             font-weight: 600;
-            font-size: 0.7rem;
-            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            background: rgba(255, 64, 129, 0.05);
         }
 
-        /* Corações */
-        .heart { position: absolute; pointer-events: none; z-index: -1; animation: floatUp 5s linear forwards; }
-        @keyframes floatUp {
-            0% { transform: translateY(110vh) scale(0.5); opacity: 0; }
-            50% { opacity: 0.8; }
-            100% { transform: translateY(-10vh) scale(1); opacity: 0; }
-        }
-
-        #p1 { z-index: 5; } #p2 { z-index: 4; } #p3 { z-index: 3; } #p4 { z-index: 2; } #p5 { z-index: 1; }
+        #p1 { z-index: 5; }
+        #p2 { z-index: 4; }
+        #p3 { z-index: 3; }
+        #p4 { z-index: 2; }
+        #p5 { z-index: 1; }
     </style>
 </head>
 <body>
@@ -133,7 +163,9 @@
         <div id="p1" class="paper" onclick="flip(1)">
             <div class="front">
                 <h1>Onde o Coração Pousa</h1>
-                <div class="photo-polaroid"><img src="cp.jpg"></div>
+                <div class="photo-polaroid">
+                    <img src="cp.jpg" alt="Foto Capa">
+                </div>
                 <p>Toque para abrir as memórias que guardo com tanto amor...</p>
             </div>
             <div class="back">
@@ -146,24 +178,34 @@
         <div id="p2" class="paper" onclick="flip(2)">
             <div class="front">
                 <h1>Nossos Detalhes</h1>
-                <div class="photo-polaroid"><img src="trabalho.jpg"></div>
+                <div class="photo-polaroid" style="transform: rotate(2deg);">
+                    <img src="trabalho.jpg" alt="Foto 2">
+                </div>
                 <p>Cada momento ao seu lado se torna uma memória inesquecível.</p>
             </div>
             <div class="back">
                 <h1>Conexão</h1>
-                <p>Gosto de como a gente se entende, mesmo sem dizer nenhuma palavra.</p>
+               <div class="photo-polaroid" style="transform: rotate(2deg);">
+                    <img src="corrida.jpg" alt="Foto 2">
+                </div>
+                <p>Gosto de como a gente se entende, mesmo sem dizer nenhuma palavra </p>
             </div>
         </div>
 
         <div id="p3" class="paper" onclick="flip(3)">
             <div class="front">
                 <h1>Sintonia</h1>
-                <div class="photo-polaroid"><img src="nos.jpg"></div>
-                <p>É incrível como você consegue deixar tudo mais leve e bonito.</p>
+                <div class="photo-polaroid" style="transform: rotate(-2deg);">
+                    <img src="nos.jpg" alt="Foto 3">
+                </div>
+                <p>É incrível como você consegue deixar tudo mais leve.</p>
             </div>
             <div class="back">
                 <h1>Alegria</h1>
-                <p>Você é o meu pensamento favorito durante o dia.</p>
+                <div class="photo-polaroid" style="transform: rotate(2deg);">
+                    <img src="deitado.jpg" alt="Foto 2">
+                </div>
+                <p>Você é o meu pensamento favorito durante o dia</p>
             </div>
         </div>
 
@@ -171,7 +213,9 @@
             <div class="front">
                 <h1>Perfeita</h1>
                 <p>"Algumas pessoas trazem luz, você traz o sol inteiro para a minha vida"</p>
-                <div class="photo-polaroid"><img src="solo.jpg"></div>
+                <div class="photo-polaroid" style="transform: rotate(3deg);">
+                    <img src="solo.jpg" alt="Foto Sol">
+                </div>
             </div>
             <div class="back">
                 <h1>Desejo</h1>
@@ -182,17 +226,19 @@
         <div id="p5" class="paper" onclick="flip(5)">
             <div class="front">
                 <h1>Para Você</h1>
-                <div class="photo-polaroid"><img src="abrac.jpg"></div>
-                <p>Existem abraços que são casas. O seu é o meu endereço favorito, onde eu sempre quero ficar e nunca mais sair</p>
+                <div class="photo-polaroid">
+                    <img src="abrac.jpg" alt="Foto Final">
+                </div>
+                <p style="font-size: 0.9rem;">Existem abraços que são casas. O seu é o meu endereço favorito, onde eu sempre quero ficar.</p>
             </div>
-            <div class="back" style="background: #c2185b; color: white;">
-                <p style="color: white; font-size: 0.85rem; line-height: 1.5;">
-                    Não existe dia ruim se eu tiver você por perto. <br><br>
-                    A saudade aperta todos os dias, <br>
-                    mas a vontade de te encontrar e te encher de beijos e mordidas é o que me faz contar as horas. <br><br>
+            <div class="back" style="background: #c2185b; color: white; padding: 20px;">
+                <p style="color: white; font-size: 0.8rem; line-height: 1.4; font-weight: 500;">
+                    Não existe dia ruim se eu tiver você por perto. <br> 
+                    A saudade aperta todos os dias, <br> 
+                    mas a vontade de te encontrar e te encher de beijos e mordidas é o que me faz contar as horas. <br> 
                     Te querer por perto virou meu vício favorito. 🥰
                 </p>
-                <div class="badge" style="border-color: white; color: white;">PARA SEMPRE</div>
+                <div class="badge" style="border-color: white; color: white; margin-top: 10px; padding: 5px 15px;">PARA SEMPRE</div>
             </div>
         </div>
 
@@ -204,44 +250,50 @@
         const book = document.getElementById('book');
 
         function flip(id) {
-            // Se clicar na capa (p1) e o livro estiver fechado
             if (id === 1 && currentStep === 0) {
                 book.classList.add('book-open');
                 document.getElementById('p1').classList.add('flipped');
                 currentStep = 1;
             } 
-            // Se clicar na página atual para virar a próxima
             else if (id === currentStep + 1 && id < totalPapers) {
-                document.getElementById('p' + id).classList.add('flipped');
+                const currentPaper = document.getElementById('p' + id);
+                currentPaper.classList.add('flipped');
+                currentPaper.style.zIndex = id; 
                 currentStep = id;
             }
-            // Se for a última página
             else if (id === totalPapers && currentStep === totalPapers - 1) {
                 document.getElementById('p' + totalPapers).classList.add('flipped');
                 currentStep = totalPapers;
             }
-            // Resetar o livro
             else if (currentStep === totalPapers) {
-                for (let i = totalPapers; i >= 1; i--) {
-                    setTimeout(() => {
-                        document.getElementById('p' + i).classList.remove('flipped');
-                        if(i === 1) book.classList.remove('book-open');
-                    }, (totalPapers - i) * 100);
+                for (let i = 1; i <= totalPapers; i++) {
+                    document.getElementById('p' + i).classList.remove('flipped');a
                 }
+                book.classList.remove('book-open');
+                setTimeout(() => {
+                    document.getElementById('p1').style.zIndex = 5;
+                    document.getElementById('p2').style.zIndex = 4;
+                    document.getElementById('p3').style.zIndex = 3;
+                    document.getElementById('p4').style.zIndex = 2;
+                    document.getElementById('p5').style.zIndex = 1;
+                }, 600);
                 currentStep = 0;
             }
         }
 
-        // Sistema de corações (Otimizado)
-        setInterval(() => {
+        function createHearts() {
             const heart = document.createElement('div');
             heart.classList.add('heart');
-            heart.innerHTML = ['💖','✨','🌸','🤍'][Math.floor(Math.random() * 4)];
+            const icons = ['💖','✨','🌸','🤍','🌹'];
+            heart.innerHTML = icons[Math.floor(Math.random() * icons.length)];
             heart.style.left = Math.random() * 100 + "vw";
-            heart.style.fontSize = Math.random() * 10 + 15 + "px";
+            heart.style.fontSize = (Math.random() * 10 + 15) + "px";
+            const duration = Math.random() * 3 + 4;
+            heart.style.animationDuration = duration + "s";
             document.body.appendChild(heart);
-            setTimeout(() => heart.remove(), 5000);
-        }, 700);
+            setTimeout(() => heart.remove(), duration * 1000);
+        }
+        setInterval(createHearts, 400);
     </script>
 </body>
 </html>
